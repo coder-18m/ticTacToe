@@ -1,3 +1,5 @@
+// tictactoe
+
 import java.util.*;
 
 public class ticTacToe {
@@ -6,7 +8,11 @@ public class ticTacToe {
 
 
     public static void main(String[] args) {
-        
+
+        // prompt the user to ask if they want to play vs the computer or vs another player
+        //making it so you can play the computer?
+        // add a randoom selection after the user has inputted a choice
+
         Scanner scanny = new Scanner(System.in);
         
         String[][] grid = {
@@ -14,210 +20,195 @@ public class ticTacToe {
                     {"open", "open", "open"},
                     {"open", "open", "open"}
                     };
-
-        ticTacToe(scanny, grid);
+        openScreen();
+        playGame(scanny, grid);
+        // coordinatePrompt(1, 2, "X's", scanny);
         
     }
-    public static String ticTacToe(Scanner scanny, String[][] grid) {
+
+    public static void openScreen() {
+        System.out.println("Welcome to TicTacToe! (▀̿Ĺ̯▀̿ ̿)");
+        System.out.println();
+        System.out.println("Rules: ");
+        System.out.println("Select an X and O player. Each coordinate entry must range from 0,2. First to get 3 in a row wins.");
+
+
+        System.out.println();
+    }
+
+    public static String[][] playingGrid(String[][] grid) {
+        int gridWidth = grid[0].length;
+
+        for (int i = 0; i < gridWidth; i++) {
+            System.out.println(Arrays.toString(grid[i]));
+        }
+        System.out.println();
+        return grid;
+
+    }
+
+    public static String playGame(Scanner scanny, String[][] grid) {
+        // moves counter
         int moves = 0;
 
-        // grid[2][0] = "x";
-        int gridWidth = grid[0].length;
-        System.out.println("Welcome to TicTacToe (づ￣ 3￣)づ");
-        System.out.println();
-            // System.out.print(Arrays.toString(grid[i]));
-            for (int j = 0; j < gridWidth; j++) {
-                System.out.println(Arrays.toString(grid[j]));
-            }
+            while (moves < 9) {
+                playingGrid(grid);
+                if (checkColumnWin(grid) == true || checkDiagonalWin(grid) == true || checkRowsWin(grid) == true) {
+                    if (checkColumnWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    if (checkDiagonalWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    if (checkRowsWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    return "Game over!";
+                }
+                
+                // X input is hereeeeeee
+                int xInputY = coordinatePrompt("X's", "y", scanny);
+                int xInputX = coordinatePrompt("X's", "x", scanny);
+                System.out.println();
 
-        // while not 3 Os in a row/diagonal or 3 X in a row/diagonal or 9 moves have been made--> do all this
-        // print the available spaces for a move.. if not available reprint
-        // dont allow inputs to change once inputed
+                if (!grid[xInputY][xInputX].equals("open")) {
+                    System.out.println("Womp Womp... this spot it taken please try again...");
+                    xInputY = coordinatePrompt("X's", "y", scanny);
+                    xInputX = coordinatePrompt("X's", "x", scanny);
+
+                    while (!grid[xInputY][xInputX].equals("open")) {
+                        System.out.println("Womp Womp... this spot it taken please try again...");
+                        xInputY = coordinatePrompt("X's", "y", scanny);
+                        xInputX = coordinatePrompt("X's", "x", scanny);
+                    }
+                } else {
+                    moves++;
+
+                }
+                grid[xInputY][xInputX] = XINPUT;
+
+                //check win conditions
+                playingGrid(grid);
+                if (checkColumnWin(grid) == true || checkDiagonalWin(grid) == true || checkRowsWin(grid) == true) {
+                    if (checkColumnWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    if (checkDiagonalWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    if (checkRowsWin(grid) == true) {
+                        System.out.println("Game over! Womp Womp for the loser :(");
+                    }
+                    return "Game over!";
+                }
+
+                
+                // O input is hereeeeeeeee
+                int oInputY = coordinatePrompt("O's", "y", scanny);
+                int oInputX = coordinatePrompt("O's", "x", scanny);
+
+                if (!grid[oInputY][oInputX].equals("open")) {
+                    System.out.println("Womp Womp... this spot it taken please try again...");
+                    oInputY = coordinatePrompt("X's", "y", scanny);
+                    oInputX = coordinatePrompt("X's", "x", scanny);
+
+                    while (!grid[oInputY][oInputX].equals("open")) {
+                        System.out.println("Womp Womp... this spot it taken please try again...");
+                        oInputY = coordinatePrompt("X's", "y", scanny);
+                        oInputX = coordinatePrompt("X's", "x", scanny);
+                    }
+                } else {
+                    moves++;
+                    System.out.println(moves);
+                }
+                grid[oInputY][oInputX] = OINPUT;
+
+
+                System.out.println("The number of moves is at " + moves);
+                System.out.println();
+                
+            }
         
-        while (moves < 9){
-            // check if 3 x in a row
-            // check if 3 o in a row
+        return "";
 
-            // ask for the coordinate inputs 
-            System.out.println();
-            System.out.print("What index x value would you like the X's? ");
-            int xLength = scanny.nextInt();
-            System.out.println();
-
-            System.out.print("What index y value would you like the X's? ");
-            int xWidth = scanny.nextInt();
-            System.out.println();
-
-            // System.out.print("Enter X to play: ");
-            // String xInput = scanny.next();
-
-            System.out.println();
-
-            if (!grid[xLength][xWidth].equals("open")) {
-                System.out.println();
-                System.out.println("Womp womp...This spot is taken! Please pick a new spot...");
-                System.out.print("What index x value would you like the X's? ");
-                xLength = scanny.nextInt();
-                System.out.println();
-
-                System.out.print("What index y value would you like the X's? ");
-                xWidth = scanny.nextInt();
-                grid[xLength][xWidth] = XINPUT;
-                System.out.println();
-            }
-
-            grid[xLength][xWidth] = XINPUT;
-
-            //check checkWin
-            if (checkWin(grid) == true) {
-                System.out.println("Game over! X's win!");
-                for (int j = 0; j < gridWidth; j++) {
-                    System.out.println(Arrays.toString(grid[j]));
-                }
-                return "Game Over!";
-            }
-
-            moves++;
-
-            //----------FOR O's--------------
-
-            // System.out.print(Arrays.toString(grid[i]));
-            for (int j = 0; j < gridWidth; j++) {
-                System.out.println(Arrays.toString(grid[j]));
-            }
-            System.out.println();
-            System.out.print("What index y value would you like the O's? ");
-            int oLength = scanny.nextInt();
-            System.out.println();
-
-            System.out.print("What index y value would you like the O's? ");
-            int oWidth = scanny.nextInt();
-            System.out.println();
-
-            // System.out.print("Enter O to play: ");
-            // String oInput = scanny.next();
-            System.out.println();
-
-            if (!grid[oLength][oWidth].equals("open")) {
-                System.out.println();
-                System.out.println("Womp womp...This spot is taken! Please pick a new spot...");
-                System.out.print("What index y value would you like the O's? ");
-                oLength = scanny.nextInt();
-                System.out.println();
-
-                System.out.print("What index y value would you like the O's? ");
-                oWidth = scanny.nextInt();
-                System.out.println();
-
-                grid[oLength][oWidth] = OINPUT;
-            }
-
-            grid[oLength][oWidth] = OINPUT;
-
-            //checkWin
-            if (checkWin(grid) == true) {
-                System.out.println("Game over! O's win!");
-                System.out.println();
-                for (int j = 0; j < gridWidth; j++) {
-                    System.out.println(Arrays.toString(grid[j]));
-                }
-                return "Game Over!";
-            }
-
-
-            moves++;
-
-            for (int j = 0; j < gridWidth; j++) {
-                System.out.println(Arrays.toString(grid[j]));
-            }
-        }
-
-        return "Draw!";
     }
 
+    public static int coordinatePrompt(String player, String plane, Scanner scanny) {
+        System.out.print("What index " + plane + " value would you like for " + player + "? ");
+        int coorValue = scanny.nextInt();
+
+        if (0 > coorValue || coorValue > 2) {
+            System.out.print("This is not within 0 to 2, please re-enter move: ");
+            coorValue = scanny.nextInt();
+            while (0 > coorValue || coorValue > 2) {
+                System.out.print("This is not within 0 to 2, please re-enter move: ");
+                coorValue = scanny.nextInt();
+            }
+        // System.out.print("What index x value would you like for " + player + "? ");
+        // int coorXValue = scanny.nextInt();
+
+        // if (0 > coorXValue || coorXValue > 2) {
+        //     System.out.print("This is not within 0 to 2, please re-enter move: ");
+        //     coorXValue = scanny.nextInt();
+        //     while (0 > coorXValue || coorXValue > 2) {
+        //         System.out.print("This is not within 0 to 2, please re-enter move: ");
+        //         coorXValue = scanny.nextInt();
+        //     }
+        }
+        return coorValue;
+    }
     
 
-    public static boolean checkWin(String[][] grid) {
+    // =========Ending Conditions Methods ============== \(￣︶￣*\))
+
+    public static boolean checkColumnWin(String[][] grid) {
         boolean win = false;
-        // check diagonals
-        // start at corners and check grid[0][0], g[1][1], g[2][2] and in reverse for each
-            // grid[0][2], grid [1][1], grid[2][0]
-            // if these are filled, --> print winners
-        if (grid[0][0].equals(XINPUT) && grid[1][1].equals(XINPUT) && grid[2][2].equals(XINPUT)) {
-            win = true;
-            return win;
-        }
-        if (grid[0][0].equals(OINPUT) && grid[1][1].equals(OINPUT) && grid[2][2].equals(OINPUT)) {
-            win = true;
-            return win;
-        }
+        
+        // loop through whole array, if there are 3 matching j values that equal the same input, then there's a column win
+        // for (int i = 0; i < grid.length; i++) {
+        //     for (int j = 0; j < grid.length[i]; j++) {
+        //         if (!gird[i][j].equals("open")) {
 
-        if (grid[0][2].equals(XINPUT) && grid[1][1].equals(XINPUT) && grid[2][0].equals(XINPUT)) {
-            win = true;
-            return win;
-        }
-        if (grid[0][2].equals(OINPUT) && grid[1][1].equals(OINPUT) && grid[2][0].equals(OINPUT)) {
-            win = true;
-            return win;
-        }
-
-        for (int i = 0; i < grid.length; i++) {
-
-            // Check in columns
-            if (i == 0) {
+        //         }
                 
-                if (grid[i].equals(XINPUT)) {
-                    if (grid[i + 1].equals(XINPUT)){
-                        if (grid[i + 2].equals(XINPUT)){
-                            win = true;
-                            return win;
-                        }
-                    }
-                }
-                if (grid[i].equals(OINPUT)) {
-                    if (grid[i + 1].equals(OINPUT)){
-                        if (grid[i + 2].equals(OINPUT)){
-                            win = true;
-                            return win;
-                        }
-                    }
-                }
-            }
+        //     }
+        // }
 
-            if (i == 1 && grid[i - 1].equals(OINPUT)) {
-                if (grid[i].equals(XINPUT)) {
-                    if (grid[i + 1].equals(XINPUT)) {
-                        win = true;
-                        return win;
-                    }
-                }
-            }
-            if (i == 1 && grid[i - 1].equals(OINPUT)) {
-                if (grid[i].equals(XINPUT)) {
-                    if (grid[i + 1].equals(OINPUT)) {
-                        win = true;
-                        return win;
-                    }
-                }
-            }
+        // return false;
+        if (grid[0][0].equals(XINPUT) && grid[1][0].equals(XINPUT) && grid[2][0].equals(XINPUT)) {
+            win = true;
+            return win;
+        }
+        if (grid[0][1].equals(XINPUT) && grid[1][1].equals(XINPUT) && grid[2][1].equals(XINPUT)) {
+            win = true;
+            return win;
+        }
 
-            if (i == 2 && grid[i - 1].equals(XINPUT) && grid[i - 2].equals(XINPUT)) {
-                if (grid[i].equals(XINPUT)) {
-                    win = true;
-                    return win;
-                }
-            }
-            if (i == 2 && grid[i - 1].equals(OINPUT) && grid[i - 2].equals(OINPUT)) {
-                if (grid[i].equals(OINPUT)) {
-                    win = true;
-                    return win;
-                }
-            }
+        if (grid[0][2].equals(XINPUT) && grid[1][2].equals(XINPUT) && grid[2][2].equals(XINPUT)) {
+            win = true;
+            return win;
+        }
+        if (grid[0][0].equals(OINPUT) && grid[1][0].equals(OINPUT) && grid[2][0].equals(OINPUT)) {
+            win = true;
+            return win;
+        }
+        if (grid[0][1].equals(OINPUT) && grid[1][1].equals(OINPUT) && grid[2][1].equals(OINPUT)) {
+            win = true;
+            return win;
+        }
 
+        if (grid[0][2].equals(OINPUT) && grid[1][2].equals(OINPUT) && grid[2][2].equals(OINPUT)) {
+            win = true;
+            return win;
+        }
 
+         return win;
 
+    }
 
-            // Check in rows
+    public static boolean checkRowsWin(String[][] grid) {
+        boolean win = false;
+        for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 
                 if (j == 0){
@@ -273,14 +264,39 @@ public class ticTacToe {
                         }
                     
                 }
-
-
-
             }
-            
+
+        }
+        
+        
+        return win;
+
+    }
+
+    public static boolean checkDiagonalWin(String[][] grid) {
+        boolean win = false;
+
+        if (grid[0][0].equals(XINPUT) && grid[1][1].equals(XINPUT) && grid[2][2].equals(XINPUT)) {
+            win = true;
+            return win;
+        }
+        if (grid[0][0].equals(OINPUT) && grid[1][1].equals(OINPUT) && grid[2][2].equals(OINPUT)) {
+            win = true;
+            return win;
         }
 
-     return win;
+        if (grid[0][2].equals(XINPUT) && grid[1][1].equals(XINPUT) && grid[2][0].equals(XINPUT)) {
+            win = true;
+            return win;
+        }
+        if (grid[0][2].equals(OINPUT) && grid[1][1].equals(OINPUT) && grid[2][0].equals(OINPUT)) {
+            win = true;
+            return win;
+        }
+         return win;
+    }
 
+    public static boolean checkDraw(String [][] grid) {
+         return false;
     }
 }
